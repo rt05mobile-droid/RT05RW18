@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOBILE RT 05 - Oleana Park</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7f6; color: #333; padding-top: 175px; }
+        
+        .fixed-top-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1050;
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .hero-section { color: white; padding: 15px 0 10px 0; }
+        .logo-rt { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; }
+        .hero-section h1 { font-size: 1.1rem; margin-bottom: 0; }
+        .hero-section p { font-size: 0.75rem; margin-bottom: 0; }
+
+        .running-text-container {
+            background-color: #ffc107; color: #212529; padding: 5px 0;
+            font-weight: 700; font-size: 0.75rem;
+        }
+
+        .card-menu { 
+            border: none; border-radius: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); 
+            cursor: pointer; transition: 0.2s; background: white; height: 100px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        }
+        .card-menu:active { transform: scale(0.92); background-color: #f8f9fa; }
+        .card-menu .icon-size { font-size: 2.2rem; margin-bottom: 2px; }
+        .card-menu small { font-size: 0.85rem; font-weight: 700; color: #0a58ca; }
+
+        .content-section { display: none; margin-top: 15px; animation: fadeIn 0.4s ease-in-out; }
+        .active-section { display: block; }
+        
+        .status-ok { background-color: #e7f3ff; color: #0d6efd; border: 1px solid #0d6efd; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .status-wait { background-color: #f8f9fa; color: #6c757d; border: 1px solid #dee2e6; padding: 4px 10px; border-radius: 20px; font-size: 11px; }
+        
+        .agenda-card {
+            background: #fff; border-left: 5px solid #ffc107;
+            border-radius: 12px; padding: 15px; margin-bottom: 12px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        }
+
+        footer { padding: 25px 0; border-top: 1px solid #dee2e6; margin-top: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="fixed-top-header">
+        <header class="hero-section text-center">
+            <div class="container">
+                <img src=https://i.postimg.cc/CMcDqm4p/1776976391113-removebg-preview.png alt="Logo RT" class="logo-rt">
+                <h1 class="fw-bold">MOBILE RT 05</h1>
+                <p class="opacity-75">Oleana Park • RW 18</p>
+            </div>
+        </header>
+        <div class="running-text-container">
+            <marquee direction="left" scrollamount="5">📢 INFO: Transparansi Dana, Surat Digital, dan Agenda Kegiatan RT 05.</marquee>
+        </div>
+    </div>
+
+    <main class="container py-2">
+        
+        <div class="row g-3 text-center mb-1">
+            <div class="col-6">
+                <div class="card card-menu" onclick="showSection('section-warga')">
+                    <div class="icon-size">📋</div><small>Data Warga</small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-menu" onclick="showSection('section-kas')">
+                    <div class="icon-size">💰</div><small>Laporan Kas</small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-menu" onclick="showSection('section-surat')">
+                    <div class="icon-size">📁</div><small>Arsip Surat</small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-menu" onclick="showSection('section-agenda')">
+                    <div class="icon-size">📅</div><small>Agenda RT</small>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-3">
+
+        <div id="section-agenda" class="content-section active-section">
+            <h6 class="fw-bold text-primary mb-3"><span class="me-2">📅</span> Agenda Kegiatan Mendatang</h6>
+            <div id="list-agenda">
+                <p class="text-center text-muted small py-2">Memuat agenda...</p>
+            </div>
+        </div>
+
+        <div id="section-warga" class="content-section">
+            <h6 class="fw-bold text-primary mb-3">👥 Status Iuran Warga</h6>
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <table class="table mb-0 text-center small">
+                    <thead class="table-light"><tr><th>Nama</th><th>Blok</th><th>Status</th></tr></thead>
+                    <tbody id="tabel-warga"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="section-kas" class="content-section">
+            <h6 class="fw-bold text-primary mb-3 text-center">💰 Transparansi Kas RT</h6>
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center mb-3 bg-white">
+                <small class="text-muted fw-bold">SALDO AKHIR</small>
+                <h3 class="fw-bold text-primary mt-1" id="total-saldo">Rp 0</h3>
+            </div>
+            <div id="list-kas" class="small px-2"></div>
+        </div>
+
+        <div id="section-surat" class="content-section">
+            <h6 class="fw-bold text-primary mb-3 text-center">📁 Arsip Sekretariat Digital</h6>
+            <div class="card border-0 shadow-sm p-2 rounded-4 bg-white" id="list-surat">
+                <p class="text-center text-muted small py-2">Memuat surat...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center text-muted small">
+        <p class="mb-1 fw-bold">© 2026 Oleana Park Digital</p>
+        <p class="fst-italic mb-0">RT 05 RW 18 - Kelurahan Tanjung Piayu</p>
+    </footer>
+
+    <script>
+        // Data KAS & WARGA
+        const urlKas = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9IzJn8M1Emu0_LC4TY_cQik462FybKxEKgB9RaleHVqtOSXV17l1q_DTg2WG_a3DM2VYEzNEaKCI6/pub?output=csv";
+        const urlWarga = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT06nXtSsC_BB1RnsPRFTJyp9Nq7tqSkpN0GKVvtXLWIdewFJBMoCENViQWeN-Rw4DXqNCvQlHJswq7/pub?output=csv";
+        
+        // Data SURAT & AGENDA (Sudah Diperbaiki Linknya ke CSV)
+        const urlSurat = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIWCVJPnol6BmfzfrmVo3Dx7ucnA1j9iuQBQmzjTVFsRr-GiJ7injvHvlvHkbq_aykB-G6GA8JVnir/pub?output=csv";
+        const urlAgenda = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTY2vbscjBXedI52clP0cA__fz99qB_Rrs7lIjUR-Ta_splDevu8mEZf6Bof2aDGwjx2RP6XMaRkrlQ/pub?output=csv";
+
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById(id).classList.add('active-section');
+            window.scrollTo({ top: document.getElementById(id).offsetTop - 170, behavior: 'smooth' });
+        }
+
+        async function fetchCSV(url) {
+            try {
+                const response = await fetch(url + '&t=' + new Date().getTime());
+                const data = await response.text();
+                return data.split("\n").map(row => row.split(","));
+            } catch (e) { return []; }
+        }
+
+        async function initApp() {
+            try {
+                const [dK, dW, dS, dA] = await Promise.all([
+                    fetchCSV(urlKas), 
+                    fetchCSV(urlWarga), 
+                    fetchCSV(urlSurat),
+                    fetchCSV(urlAgenda)
+                ]);
+
+                // 1. DATA KAS
+                let total = 0, htmlK = "";
+                dK.slice(1).forEach(row => {
+                    if (row[1]) {
+                        let val = parseInt(row[1].replace(/[^0-9-]/g, '')) || 0;
+                        total += val;
+                        htmlK += `<div class="d-flex justify-content-between border-bottom py-2">
+                            <div><div class="fw-bold" style="font-size:0.85rem">${row[0].replace(/"/g, '')}</div><small class="text-muted">${(row[2]||"").replace(/"/g, '')}</small></div>
+                            <div class="${val >= 0 ? 'text-success' : 'text-danger'} fw-bold">Rp ${Math.abs(val).toLocaleString('id-ID')}</div>
+                        </div>`;
+                    }
+                });
+                document.getElementById('total-saldo').innerText = "Rp " + total.toLocaleString('id-ID');
+                document.getElementById('list-kas').innerHTML = htmlK;
+
+                // 2. DATA WARGA
+                let htmlW = "";
+                dW.slice(1).forEach(row => {
+                    if (row[0]) {
+                        let isLunas = (row[2] || "").toLowerCase().includes("lunas");
+                        htmlW += `<tr><td class="text-start ps-3 fw-bold">${row[0].replace(/"/g, '')}</td><td>${row[1]}</td><td><span class="${isLunas ? 'status-ok' : 'status-wait'}">${isLunas ? 'Lunas' : 'Proses'}</span></td></tr>`;
+                    }
+                });
+                document.getElementById('tabel-warga').innerHTML = htmlW;
+
+                // 3. DATA SURAT
+                let htmlS = "";
+                dS.slice(1).forEach(row => {
+                    if (row[0] && row[2] && row[2].includes("http")) {
+                        htmlS += `<div class="d-flex justify-content-between align-items-center border-bottom py-3 px-2">
+                            <div style="flex:1"><div class="fw-bold small">${row[0].replace(/"/g, '')}</div><small class="text-muted small">${(row[1]||"").replace(/"/g, '')}</small></div>
+                            <a href="${row[2].trim().replace(/"/g, '')}" target="_blank" class="btn btn-sm btn-primary fw-bold px-3">BUKA</a>
+                        </div>`;
+                    }
+                });
+                document.getElementById('list-surat').innerHTML = htmlS || "<p class='text-center small text-muted'>Belum ada surat.</p>";
+
+                // 4. DATA AGENDA
+                let htmlA = "";
+                dA.slice(1).forEach(row => {
+                    if (row[0]) {
+                        htmlA += `<div class="agenda-card">
+                            <div class="fw-bold text-dark" style="font-size:0.95rem">${row[0].replace(/"/g, '')}</div>
+                            <div class="small text-primary fw-bold mt-1">🗓️ ${(row[1]||"").replace(/"/g, '')}</div>
+                            <div class="small text-muted">📍 ${(row[2]||"").replace(/"/g, '')}</div>
+                        </div>`;
+                    }
+                });
+                document.getElementById('list-agenda').innerHTML = htmlA || "<p class='text-center small text-muted'>Belum ada agenda.</p>";
+
+            } catch (e) { console.error(e); }
+        }
+        window.onload = initApp;
+    </script>
+</body>
+</html>
